@@ -1,0 +1,1 @@
+export type Combinator = "And" | "Or";
