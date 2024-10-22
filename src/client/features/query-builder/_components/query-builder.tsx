@@ -1,3 +1,3 @@
 export const QueryRule = () => (
-    <div></div>
+    <div>query rule</div>
 )

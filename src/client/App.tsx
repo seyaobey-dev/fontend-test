@@ -1,4 +1,5 @@
 import axios from "axios";
+import { QueryBuilder } from "./features/query-builder";
 
 function App() {
   const handleClick = async () => {
@@ -14,6 +15,7 @@ function App() {
     <div>
       <h1>Query Builder</h1>
       <form>
+        <QueryBuilder />  
         <button type="button" onClick={handleClick}>
           Submit
         </button>
