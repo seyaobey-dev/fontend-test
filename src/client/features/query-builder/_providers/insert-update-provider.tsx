@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Combinator, FieldCondition, GroupItem, SubCondition } from "../../../../types";
-import { HandleChangeCombinatorFunction, HandleFieldValueChangeFunction, InsertUpdateContext } from "./insert-update-context";
+import { HandleAppendFieldFunction, HandleChangeCombinatorFunction, HandleDeleteFieldFunction, HandleFieldValueChangeFunction, InsertUpdateContext } from "./insert-update-context";
+
+/**
+ * This component uses the context api to transform the initial data into an array of groups for better edit.
+ * Then it exposes the data and the functions to update the data to the children.
+ */
 
 export const InsertUpdateProvider = ({ children, root }: React.PropsWithChildren<{ root: Combinator }>) => {
     const [data, setData] = useState<GroupItem[]>(convertToArray(root));
@@ -37,9 +42,45 @@ export const InsertUpdateProvider = ({ children, root }: React.PropsWithChildren
         }));
     }
 
+    const handleAppendField: HandleAppendFieldFunction = (props) => {
+        setData((prev) => prev.map((group) => {
+            if (group.id === props.groupId) {
+                return {
+                    ...group,
+                    fields: [
+                        ...group.fields, 
+                        {
+                            id: randomId(),
+                            fieldName: "name",
+                            operator: "EQUAL",
+                            value: "",
+                        }
+                    ]
+                }
+            }
+
+            return group;
+        }));    
+    };
+
+    const handleDeleteField: HandleDeleteFieldFunction = (props) => {
+        setData((prev) => prev.map((group) => {
+            if (group.id === props.groupId) {
+                return { ...group, fields: group.fields.filter((field) => field.id !== props.fieldId) };
+            }
+            return group;
+        }));
+    }
+
     return (
         <InsertUpdateContext.Provider 
-            value={{ data, handleFieldValueChange, handleChangeCombinator }}>
+            value={{ 
+                data, 
+                handleFieldValueChange, 
+                handleChangeCombinator,
+                handleAppendField,
+                handleDeleteField,
+            }}>
                 {children}
         </InsertUpdateContext.Provider>
     )
@@ -51,7 +92,7 @@ const convertToArray = (root: Combinator) => {
         {
             id: "root",
             parentId: null,
-            combinator: root.combinator,
+            combinator: root.combinator ?? "AND",
             fields: ((root.conditions ?? []) as FieldCondition[])
                         .map((f) => ({...f, id: randomId()})),
         }
@@ -87,4 +128,9 @@ const convertToArray = (root: Combinator) => {
 };
 
 
-const randomId = () => Math.random().toString(36).substring(2, 15);
+const randomId = () => {
+    const timestamp = Date.now();
+    let randomString = timestamp.toString(36);
+    randomString += Math.random().toString(36).substring(2);
+    return randomString;
+}

@@ -4,7 +4,7 @@ import { useInsertUpdate } from "../_providers/use-insert-update";
 import { ChangeEvent } from "react";
 
 export const ConditionForm: React.FC<{ groupId: string; field: FieldCondition; }> = ({ groupId, field }) => {
-    const { handleFieldValueChange } = useInsertUpdate();
+    const { handleFieldValueChange, handleDeleteField } = useInsertUpdate();
 
     const handleFieldNameChange = (fieldId: string) => (value: string) => {
         handleFieldValueChange({ groupId, fieldId, key: "fieldName", value })
@@ -30,6 +30,6 @@ export const ConditionForm: React.FC<{ groupId: string; field: FieldCondition; }
         
         <CustomInput label="Value" value={field.value as string} onChange={handleValueChange(field.id!)} />
 
-        <DeleteButton />
+        <DeleteButton onClick={() => handleDeleteField({ groupId, fieldId: field.id! })} />
     </div>
 }

@@ -1,4 +1,4 @@
-import { Combinator, SubCondition } from "../types";
+import { Combinator } from "../types";
 
 export const mockData: Combinator = {
     combinator: "AND",  
@@ -6,37 +6,37 @@ export const mockData: Combinator = {
         {
             fieldName: "name",
             operator: "EQUAL",
-            value: "John Doe"
+            value: ""
         }, 
-        {
-            fieldName: "installments",
-            operator: "GREATER_THAN",
-            value: "11111"
-        },
-        {
-            combinator: "AND",
-            subConditions: [
-                {
-                    fieldName: "id",
-                    operator: "EQUAL",
-                    value: "1234567890"
-                }, 
-                {
-                    fieldName: "amount",
-                    operator: "LESS_THAN",
-                    value: { amount: 100, currency: "USD" }
-                },
-                {
-                    combinator: "OR",
-                    subConditions: [
-                        {
-                            fieldName: "amount",
-                            operator: "GREATER_THAN",
-                            value: { amount: 100, currency: "USD" }
-                        }
-                    ],
-                }
-            ],
-        }
+        // {
+        //     fieldName: "installments",
+        //     operator: "GREATER_THAN",
+        //     value: "11111"
+        // },
+        // {
+        //     combinator: "AND",
+        //     subConditions: [
+        //         {
+        //             fieldName: "id",
+        //             operator: "EQUAL",
+        //             value: "1234567890"
+        //         }, 
+        //         {
+        //             fieldName: "amount",
+        //             operator: "LESS_THAN",
+        //             value: { amount: 100, currency: "USD" }
+        //         },
+        //         {
+        //             combinator: "OR",
+        //             subConditions: [
+        //                 {
+        //                     fieldName: "amount",
+        //                     operator: "GREATER_THAN",
+        //                     value: { amount: 100, currency: "USD" }
+        //                 }
+        //             ],
+        //         }
+        //     ],
+        // }
     ],
 };

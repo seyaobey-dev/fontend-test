@@ -4,7 +4,8 @@ import { ConditionForm } from "../condition-form";
 
 describe("ConditionForm", () => {
     it("renders", () => {
-        render(<ConditionForm field={{ fieldName: "amount", operator: "EQUAL", value: "Value 1" }} formPath={undefined} />);
+        // @ts-expect-error expected
+        render(<ConditionForm field={{ fieldName: "amount", operator: "EQUAL", value: "Value 1" }} />);
     });
 
     /**
