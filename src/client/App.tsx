@@ -1,5 +1,8 @@
 import axios from "axios";
 import { QueryBuilder } from "./features/query-builder";
+import { mockData } from "./mock-data";
+
+import { InsertUpdateProvider } from "./features/query-builder/_providers/insert-update-provider";
 
 function App() {
   const handleClick = async () => {
@@ -15,7 +18,11 @@ function App() {
     <div>
       <h1>Query Builder</h1>
       <form>
-        <QueryBuilder />  
+        
+        <InsertUpdateProvider root={mockData}>
+          <QueryBuilder />  
+        </InsertUpdateProvider>
+
         <button type="button" onClick={handleClick}>
           Submit
         </button>

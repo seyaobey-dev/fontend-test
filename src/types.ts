@@ -12,12 +12,15 @@ export type Currency = {
 };
 
 export type FieldCondition = {
+    id?: string;
     fieldName: FieldName;
     operator: FieldOperator;
     value: Currency| string;
 };
 
 export type SubCondition = {
+    id?: string;
+    parentId?: string;
     combinator: CombinatorOperation;
     subConditions: (FieldCondition | SubCondition)[];
 };
@@ -40,4 +43,11 @@ export type FlattenedSubCondition = {
     combinator: CombinatorOperation;
     fields: Record<string, FieldCondition>;
     subConditions: Record<string, FlattenedSubCondition>;
+};
+
+export type GroupItem = {
+    id: string;
+    parentId: string | null;
+    combinator: CombinatorOperation;
+    fields: FieldCondition[];
 };

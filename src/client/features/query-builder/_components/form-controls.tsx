@@ -11,7 +11,7 @@ export const CustomButton = ({ children, className, ...props   }: React.Componen
     </button>
 );
 
-// Select
+// Custom Select
 export const CustomSelect: React.FC<{ label: string, value: string, options: string[]; onChange: (value: string) => void }> = ({ label, value, options, onChange  }) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -33,6 +33,7 @@ export const CustomSelect: React.FC<{ label: string, value: string, options: str
                     <HiChevronUpDown />
                 </button>
             </div>
+
             {isOpen && (
                 <ul className={selectClassNames.ul}>
                     {options.map((option) => (
@@ -60,7 +61,7 @@ export const DeleteButton: React.FC<React.ComponentProps<"button">> = ({ classNa
 )
 
 const buttonClassNames = {
-    selectOperatorButton: "px-1 flex flex-row items-center gap-1 bg-[#ccd1e6] rounded p-1 cursor-pointer focus:outline-none min-w-[60px]",
+    selectOperatorButton: "px-1 flex flex-row items-center gap-1 bg-[#ccd1e6] rounded p-1 cursor-pointer focus:outline-none min-w-[60px] sm:min-w-[40px]",
     deleteButton: "flex items-center justify-center mt-6 h-8 min-w-[24px] bg-red-700",
 }
 

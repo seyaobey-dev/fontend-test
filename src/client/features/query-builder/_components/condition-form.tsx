@@ -1,23 +1,34 @@
 import { CustomInput, CustomSelect, DeleteButton } from "./form-controls";
 import { FieldCondition } from "../../../../types";
-import { toFormPath } from "../../../toFormPath";
+import { useInsertUpdate } from "../_providers/use-insert-update";
+import { ChangeEvent } from "react";
 
-export const ConditionForm: React.FC<{ field: FieldCondition; formPath: string | undefined; }> = ({ field, formPath }) => {
+export const ConditionForm: React.FC<{ groupId: string; field: FieldCondition; }> = ({ groupId, field }) => {
+    const { handleFieldValueChange } = useInsertUpdate();
 
-    console.log(toFormPath(formPath, "fieldName"), field.fieldName);
-    console.log(toFormPath(formPath, "operator"), field.operator);
-    console.log(toFormPath(formPath, "value"), field.value);
+    const handleFieldNameChange = (fieldId: string) => (value: string) => {
+        handleFieldValueChange({ groupId, fieldId, key: "fieldName", value })
+    }
+
+    const handleOperatorChange = (fieldId: string) => (value: string) => {
+        handleFieldValueChange({ groupId, fieldId, key: "operator", value })
+    }
+
+    const handleValueChange = (fieldId: string) => (e: ChangeEvent<HTMLInputElement>) => {
+        handleFieldValueChange({ groupId, fieldId, key: "value", value: e.target.value })
+    }
 
     return <div className="px-1 flex flex-row items-center gap-4 mb-4">
-        <CustomSelect label="Field name" value={field.fieldName} options={["Field 1", "Field 2", "Field 3"]} onChange={(value) => {
-            console.log(value);
-        }} />
+        <CustomSelect 
+            label="Field name" 
+            value={field.fieldName} 
+            options={["Field 1", "Field 2", "Field 3"]} 
+            onChange={handleFieldNameChange(field.id!)} 
+        />
         
-        <CustomSelect label="Operator" value={field.operator} options={["Operator 1", "Operator 2", "Operator 3"]} onChange={(value) => {
-            console.log(value)
-        }} />
+        <CustomSelect label="Operator" value={field.operator} options={["Operator 1", "Operator 2", "Operator 3"]} onChange={handleOperatorChange(field.id!)} />
         
-        <CustomInput label="Value" />
+        <CustomInput label="Value" value={field.value as string} onChange={handleValueChange(field.id!)} />
 
         <DeleteButton />
     </div>

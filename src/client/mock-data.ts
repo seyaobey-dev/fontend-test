@@ -1,7 +1,7 @@
-import { Combinator } from "../types";
+import { Combinator, SubCondition } from "../types";
 
 export const mockData: Combinator = {
-    combinator: "AND",
+    combinator: "AND",  
     conditions: [
         {
             fieldName: "name",
