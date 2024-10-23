@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Combinator, FieldCondition, GroupItem, SubCondition } from "../../../../types";
-import { HandleAppendFieldFunction, HandleChangeCombinatorFunction, HandleDeleteFieldFunction, HandleFieldValueChangeFunction, InsertUpdateContext } from "./insert-update-context";
+import { HandleAppendFieldFunction, HandleAppendGroupFunction, HandleChangeCombinatorFunction, HandleDeleteFieldFunction, HandleDeleteGroupFunction, HandleFieldValueChangeFunction, InsertUpdateContext } from "./insert-update-context";
 
 /**
  * This component uses the context api to transform the initial data into an array of groups for better edit.
@@ -72,7 +72,15 @@ export const InsertUpdateProvider = ({ children, root }: React.PropsWithChildren
         }));
     }
 
-    return (
+    const handleAppendGroup: HandleAppendGroupFunction = (props) => {
+        setData((prev) => [...prev, { id: randomId(), parentId: props.groupId, combinator: "AND", fields: [] }]);
+    }
+
+    const handleDeleteGroup: HandleDeleteGroupFunction = (props) => {
+        setData((prev) => prev.filter((group) => group.id !== props.groupId));
+    }
+
+    return (    
         <InsertUpdateContext.Provider 
             value={{ 
                 data, 
@@ -80,6 +88,8 @@ export const InsertUpdateProvider = ({ children, root }: React.PropsWithChildren
                 handleChangeCombinator,
                 handleAppendField,
                 handleDeleteField,
+                handleAppendGroup,
+                handleDeleteGroup,
             }}>
                 {children}
         </InsertUpdateContext.Provider>

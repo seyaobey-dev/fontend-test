@@ -22,10 +22,20 @@ export type HandleDeleteFieldFunction = (props: {
     fieldId: string;
 }) => void;
 
+export type HandleAppendGroupFunction = (props: {
+    groupId: string;
+}) => void;
+
+export type HandleDeleteGroupFunction = (props: {
+    groupId: string;
+}) => void;
+
 export const InsertUpdateContext = createContext<{ 
     data: GroupItem[]; 
     handleFieldValueChange: HandleFieldValueChangeFunction;
     handleChangeCombinator: HandleChangeCombinatorFunction;
     handleAppendField: HandleAppendFieldFunction;
     handleDeleteField: HandleDeleteFieldFunction;
+    handleAppendGroup: HandleAppendGroupFunction;
+    handleDeleteGroup: HandleDeleteGroupFunction;
 }>({} as never);

@@ -12,7 +12,12 @@ export const CustomButton = ({ children, className, ...props   }: React.Componen
 );
 
 // Custom Select
-export const CustomSelect: React.FC<{ label: string, value: string, options: string[]; onChange: (value: string) => void }> = ({ label, value, options, onChange  }) => {
+export const CustomSelect: React.FC<{ 
+    label: string, 
+    value: string, 
+    onChange: (value: string) => void, 
+    options: { value: string, label: string }[], 
+}> = ({ label, value, options, onChange  }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleDropdown = () => setIsOpen(!isOpen);
@@ -29,7 +34,7 @@ export const CustomSelect: React.FC<{ label: string, value: string, options: str
             <div>
                 <label className={selectClassNames.label}>{label}</label>
                 <button type="button" className={selectClassNames.dropdownButton} onClick={toggleDropdown}>
-                    <p>{value ?? "Select"}</p>
+                    <p>{options.find(option => option.value === value)?.label ?? "Select"}</p>
                     <HiChevronUpDown />
                 </button>
             </div>
@@ -37,7 +42,7 @@ export const CustomSelect: React.FC<{ label: string, value: string, options: str
             {isOpen && (
                 <ul className={selectClassNames.ul}>
                     {options.map((option) => (
-                        <li className={selectClassNames.li} key={option} onClick={() => selectOption(option)}>{option}</li>
+                        <li className={selectClassNames.li} key={option.value} onClick={() => selectOption(option.value)}>{option.label}</li>
                     ))}
                 </ul>
             )}
@@ -50,6 +55,13 @@ export const CustomInput: React.FC<React.ComponentProps<"input"> & { label: stri
     return <div>
         <label className={inputClassNames.label}>{label}</label>
         <input type="text" className={clx(inputClassNames.input, className)} {...props} />
+    </div>
+}
+
+export const CurrencyInput = () => {
+    return <div className="flex flex-row items-center gap-2">
+        <CustomSelect label="Currency" value="USD" options={[{ value: "USD", label: "USD" }, { value: "EUR", label: "EUR" }]} onChange={() => {}} />
+        <CustomInput label="Value" className="bg-white" />
     </div>
 }
 
