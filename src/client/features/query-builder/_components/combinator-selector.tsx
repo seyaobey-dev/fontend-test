@@ -2,13 +2,10 @@ import { useState } from "react";
 import { HiChevronUpDown } from "react-icons/hi2";
 import { CombinatorOperation } from "../../../../types";
 import { SelectOperatorButton } from "./form-controls";
-import { useCloseOnClickOutside } from "./use-close-on-click-outside";
 
-export const SelectCombinator: React.FC<{ combinator: CombinatorOperation; }> = ({ combinator }) => {
+export const CombinatorSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState<CombinatorOperation>(combinator);
-
-    const ref = useCloseOnClickOutside({ onClose: () => setIsOpen(false) });
+    const [selectedOption, setSelectedOption] = useState<CombinatorOperation>("AND");
   
     const toggleDropdown = () => setIsOpen(!isOpen);
   
@@ -18,7 +15,7 @@ export const SelectCombinator: React.FC<{ combinator: CombinatorOperation; }> = 
     };
   
     return (
-      <div className="relative" ref={ref}>
+      <div className="relative">
         <SelectOperatorButton
           type="button"
           onClick={toggleDropdown}
@@ -49,6 +46,6 @@ export const SelectCombinator: React.FC<{ combinator: CombinatorOperation; }> = 
 }
 
 const classNames = {
-    dropdown: "absolute z-[100] top-full left-0 mt-1 w-full bg-white rounded shadow-lg",
-    option: "w-full text-left px-2 py-1 bg-gray-200 hover:bg-gray-200 mb-1",
+    dropdown: "absolute top-full left-0 mt-1 w-full bg-white border border-gray-300 rounded shadow-lg",
+    option: "w-full text-left px-2 py-1 hover:bg-gray-100",
 }

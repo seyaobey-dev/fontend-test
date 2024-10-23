@@ -4,7 +4,7 @@ import { ConditionForm } from "../condition-form";
 
 describe("ConditionForm", () => {
     it("renders", () => {
-        render(<ConditionForm />);
+        render(<ConditionForm field={{ fieldName: "amount", operator: "EQUAL", value: "Value 1" }} />);
     });
 
     /**
