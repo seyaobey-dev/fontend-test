@@ -1,32 +1,35 @@
 import { useState } from "react";
 import { HiChevronUpDown } from "react-icons/hi2";
 import { CombinatorOperation } from "../../../../types";
-import { SelectOperatorButton } from "./form-controls";
+import { CustomButton } from "./form-controls";
 import { useCloseOnClickOutside } from "./use-close-on-click-outside";
+import { toFormPath } from "../../../toFormPath";
 
-export const SelectCombinator: React.FC<{ combinator: CombinatorOperation; }> = ({ combinator }) => {
+export const SelectCombinator: React.FC<{ formPath: string | undefined; value: CombinatorOperation; }> = ({ value, formPath }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState<CombinatorOperation>(combinator);
+    const [selectedOption, setSelectedOption] = useState<CombinatorOperation>(value);
 
     const ref = useCloseOnClickOutside({ onClose: () => setIsOpen(false) });
-  
+
     const toggleDropdown = () => setIsOpen(!isOpen);
-  
+
     const selectOption = (option: CombinatorOperation) => {
       setSelectedOption(option);
       setIsOpen(false);
     };
+
+    console.log(toFormPath(formPath, "combinator"), value);
   
     return (
       <div className="relative" ref={ref}>
-        <SelectOperatorButton
+        <CustomButton
           type="button"
           onClick={toggleDropdown}
           className="border-[#fefefe] hover:border-[#fefefe] border border-solid"
         >
           <p>{selectedOption}</p>
           <HiChevronUpDown />
-        </SelectOperatorButton>
+        </CustomButton>
 
         {isOpen && (
           <div className={classNames.dropdown}>

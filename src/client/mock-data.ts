@@ -22,29 +22,19 @@ export const mockData: Combinator = {
                     value: "1234567890"
                 }, 
                 {
+                    fieldName: "amount",
+                    operator: "LESS_THAN",
+                    value: { amount: 100, currency: "USD" }
+                },
+                {
                     combinator: "OR",
                     subConditions: [
                         {
                             fieldName: "amount",
                             operator: "GREATER_THAN",
                             value: { amount: 100, currency: "USD" }
-                        },
-                        {
-                            fieldName: "amount",
-                            operator: "LESS_THAN",
-                            value: { amount: 100, currency: "USD" }
-                        },
-                        {
-                            combinator: "AND",
-                            subConditions: [
-                                {
-                                    fieldName: "amount",
-                                    operator: "EQUAL",
-                                    value: { amount: 100, currency: "USD" }
-                                }
-                            ]
                         }
-                    ]
+                    ],
                 }
             ],
         }

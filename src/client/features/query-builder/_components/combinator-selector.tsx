@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { HiChevronUpDown } from "react-icons/hi2";
 import { CombinatorOperation } from "../../../../types";
-import { SelectOperatorButton } from "./form-controls";
+import { CustomButton } from "./form-controls";
 
 export const CombinatorSelector = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -16,14 +16,14 @@ export const CombinatorSelector = () => {
   
     return (
       <div className="relative">
-        <SelectOperatorButton
+        <CustomButton
           type="button"
           onClick={toggleDropdown}
           className="border-[#fefefe] hover:border-[#fefefe] border border-solid"
         >
           <p>{selectedOption}</p>
           <HiChevronUpDown />
-        </SelectOperatorButton>
+        </CustomButton>
 
         {isOpen && (
           <div className={classNames.dropdown}>

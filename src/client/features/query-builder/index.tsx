@@ -1,18 +1,14 @@
-import { useForm } from "react-hook-form";
-import { QueryRule } from "./_components/query-rule";
+import { QueryGroup } from "./_components/query-group";
 import { mockData } from "../../mock-data";
 import { FieldCondition, SubCondition } from "../../../types";
 
 export const QueryBuilder = () => {
-    useForm({
-        defaultValues: mockData,
-    });
-
-    const fields = (mockData.conditions ?? []).filter((cond) => !(cond as SubCondition).combinator) as FieldCondition[];                
+    const fields = (mockData.conditions ?? []).filter((cond) => !(cond as SubCondition).combinator) as FieldCondition[];
+    const subConditions = (mockData.conditions ?? []).filter((cond) => (cond as SubCondition).combinator) as SubCondition[];            
     
     return (
         <div className={classNames.queryBuilder}>
-            <QueryRule combinator={mockData.combinator} fields={fields} />
+            <QueryGroup formPath={undefined} combinator={mockData.combinator} fields={fields} subConditions={subConditions} />
         </div>
     );
 }

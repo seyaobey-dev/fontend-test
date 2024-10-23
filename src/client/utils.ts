@@ -82,6 +82,3 @@ const flattenSubConditions = (props: {
         },
     }
 }
-
-export const rebuildCombinator = (data: FlattenedCombinator) => {
-}

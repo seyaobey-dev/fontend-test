@@ -5,7 +5,7 @@ import { IoRemove } from "react-icons/io5";
 import { useCloseOnClickOutside } from "./use-close-on-click-outside";
 
 // Button
-export const SelectOperatorButton = ({ children, className, ...props   }: React.ComponentProps<"button">) => (
+export const CustomButton = ({ children, className, ...props   }: React.ComponentProps<"button">) => (
     <button type="button" className={clx(buttonClassNames.selectOperatorButton, className)} {...props}>
         {children}
     </button>
@@ -55,13 +55,13 @@ export const CustomInput: React.FC<React.ComponentProps<"input"> & { label: stri
 // Delete Button
 export const DeleteButton: React.FC<React.ComponentProps<"button">> = ({ className, ...props }) => (
     <button type="button" className={clx(buttonClassNames.selectOperatorButton, buttonClassNames.deleteButton, className,)} {...props}>
-        <IoRemove />
+        <IoRemove color="white" />
     </button>
 )
 
 const buttonClassNames = {
     selectOperatorButton: "px-1 flex flex-row items-center gap-1 bg-[#ccd1e6] rounded p-1 cursor-pointer focus:outline-none min-w-[60px]",
-    deleteButton: "flex items-center justify-center mt-6 h-8 min-w-[30px] bg-red-700",
+    deleteButton: "flex items-center justify-center mt-6 h-8 min-w-[24px] bg-red-700",
 }
 
 const selectClassNames = {
