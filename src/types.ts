@@ -48,6 +48,7 @@ export type Combinator = {
         combinator: CombinatorOperation;
         subConditions: (FieldCondition | SubCondition)[];
     })[];
+    subConditions?: (FieldCondition | SubCondition)[];
 };
 
 export type FlattenedCombinator = {

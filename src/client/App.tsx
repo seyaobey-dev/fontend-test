@@ -11,7 +11,10 @@ function App() {
   const [result, setResult] = useState<Combinator | null>();
 
   const handleSubmit = async (data: GroupQuery[]) => {
-    setResult(rebuildJson({ groups: data }));
+    const combinator: Combinator = rebuildJson(data);
+    setResult(combinator);
+    
+    // setResult(rebuildJson([]));
     // try {
     //   await axios.post("/api/save-rules", {});
     //   alert("Submitted");

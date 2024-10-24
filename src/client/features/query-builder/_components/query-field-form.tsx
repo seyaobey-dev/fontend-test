@@ -26,6 +26,7 @@ export const QueryFieldForm: React.FC<{ groupId: string; field: FieldCondition; 
         switch(fieldMapping.type) {
             
             case "string": 
+            case "number":
                 return handleFieldValueChange({ 
                     groupId, fieldId, 
                     key: "value", 
@@ -58,6 +59,15 @@ export const QueryFieldForm: React.FC<{ groupId: string; field: FieldCondition; 
                         value={field.value as CurrencyValue} 
                         onChange={handleValueChange(field.id!)} 
                      />
+
+            case "number": 
+                return <CustomInput 
+                        id={field.id!}
+                        label="Value" 
+                        type="number"
+                        value={field.value as string} 
+                        onChange={handleValueChange(field.id!)} 
+                    />
 
             default:
                 return <CustomInput 

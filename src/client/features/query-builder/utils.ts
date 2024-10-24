@@ -1,7 +1,6 @@
-import { GroupQuery } from "../../../types";
+import { Combinator, GroupQuery, SubCondition } from "../../../types";
 
-export const rebuildJson = (props: { groups: GroupQuery[] }) => {
-    const { groups } = props;
+export const rebuildJson = (groups: GroupQuery[]): Combinator => {
     
     const root = groups.find((g) => !g.parentId)!;
 
@@ -16,26 +15,7 @@ export const rebuildJson = (props: { groups: GroupQuery[] }) => {
 
     const children = groups.filter((g) => g.parentId === root.id);
 
-    const subConditions = children.map((sub) => {
-        const combinator = sub.combinator;
-    
-        const subConditions = sub.fields.map((field) => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { id, ...rest } = field;
-
-            // this is a sub condition
-            if (field.operator) {
-
-            }
-
-            return rest;
-        });
-
-        return {
-            combinator,
-            subConditions,
-        };
-    })
+    const subConditions = rebuildSubConditions(children, groups);
 
     return {
         combinator: root.combinator,
@@ -46,20 +26,32 @@ export const rebuildJson = (props: { groups: GroupQuery[] }) => {
     }
 }
 
-const rebuildSubConditions = (children:  GroupQuery[]) => {
-    const subConditions = children.map((sub) => {
-        const combinator = sub.combinator;
+const rebuildSubConditions = (children:  GroupQuery[], allGroups: GroupQuery[]): SubCondition[] => {
+    return children.map<SubCondition>((sub) => {
+        let subCondition: Combinator = {
+            combinator: sub.combinator,
+        };
 
-        const fields = sub.fields.map((field) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let subConditions: any = sub.fields.map((field) => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { id, ...rest } = field;
-
             return rest;
         });
 
-        return {
-            combinator,
-            co,
-        };
+        if (sub.combinator) {
+            const nextChildren = allGroups.filter((g) => g.parentId === sub.id);
+            subConditions = [
+                ...subConditions,
+                ...rebuildSubConditions(nextChildren, allGroups),
+            ]
+        }
+
+        subCondition = {
+            ...subCondition,
+            subConditions,
+        }
+
+        return subCondition as SubCondition;
     });
 }
