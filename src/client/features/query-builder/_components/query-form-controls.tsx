@@ -7,7 +7,7 @@ import { Currency, CurrencyValue } from "../../../../types";
 
 // Button
 export const CustomButton = ({ children, className, ...props   }: React.ComponentProps<"button">) => (
-    <button type="button" className={clx(classNames.operatorButton, className)} {...props}>
+    <button role="button" type="button" className={clx(classNames.operatorButton, className)} {...props}>
         {children}
     </button>
 );
@@ -19,9 +19,10 @@ export const CustomButton = ({ children, className, ...props   }: React.Componen
 export const CustomSelect: React.FC<{ 
     label: string, 
     value: string, 
+    id: string,
     onChange: (value: string) => void, 
     options: { value: string, label: string }[], 
-}> = ({ label, value, options, onChange  }) => {
+}> = ({ label, value, id, options, onChange  }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleDropdown = () => setIsOpen(!isOpen);
@@ -36,8 +37,8 @@ export const CustomSelect: React.FC<{
     return (
         <div className="relative" ref={ref}>
             <div>
-                <label className={classNames.dropdownLabel}>{label}</label>
-                <button type="button" className={classNames.dropdownButton} onClick={toggleDropdown}>
+                <label htmlFor={id} className={classNames.dropdownLabel}>{label}</label>
+                <button role="dropdown-button" id={id} type="button" className={classNames.dropdownButton} onClick={toggleDropdown}>
                     <p>{options.find(option => option.value === value)?.label ?? "Select"}</p>
                     <HiChevronUpDown />
                 </button>
@@ -55,18 +56,19 @@ export const CustomSelect: React.FC<{
 }
 
 // Input
-export const CustomInput: React.FC<React.ComponentProps<"input"> & { label: string }> = ({ label,        className, ...props }) => {
+export const CustomInput: React.FC<React.ComponentProps<"input"> & { label: string, id: string }> = ({ label, id, className, ...props }) => {
     return <div>
-        <label className={classNames.dropdownLabel}>{label}</label>
-        <input name="field" type="text" className={clx(classNames.input, className)} required {...props} />
+        <label htmlFor={id} className={classNames.dropdownLabel}>{label}</label>
+        <input id={id} name={`${id}-input`} type="text" className={clx(classNames.input, className)} required {...props} />
     </div>
 }
 
-export const CurrencyInput: React.FC<{ value?: CurrencyValue; onChange: (value: CurrencyValue) => void }> = ({ value = { amount: 0, currency: "USD" }, onChange }) => { 
+export const CurrencyInput: React.FC<{ id: string; value?: CurrencyValue; onChange: (value: CurrencyValue) => void }> = ({ id, value = { amount: 0, currency: "USD" }, onChange }) => { 
     return <div className="flex flex-row items-center gap-2">
         <CustomSelect 
             label="Currency" 
             value={value.currency} 
+            id={`${id}-currency`}
             options={[{ value: "USD", label: "USD" }, { value: "EUR", label: "EUR" }]} 
             onChange={currency => onChange({ ...value, currency: currency as Currency })} 
         />
@@ -74,6 +76,7 @@ export const CurrencyInput: React.FC<{ value?: CurrencyValue; onChange: (value: 
             label="Value" 
             className="bg-white" 
             type="number" 
+            id={`${id}-currency-value`}
             value={value.amount}
             onChange={e => onChange({ ...value, amount: Number(e.target.value) })} 
         />
@@ -82,14 +85,14 @@ export const CurrencyInput: React.FC<{ value?: CurrencyValue; onChange: (value: 
 
 // Delete Button
 export const DeleteButton: React.FC<React.ComponentProps<"button">> = ({ className, ...props }) => (
-    <button type="button" className={clx(classNames.operatorButton, classNames.deleteButton, className,)} {...props}>
+    <button role="delete-button" type="button" className={clx(classNames.operatorButton, classNames.deleteButton, className,)} {...props}>
         <IoRemove color="white" />
     </button>
 )
 
 const classNames = {
     operatorButton: "px-1 flex flex-row items-center gap-1 bg-[#ccd1e6] rounded p-1 cursor-pointer focus:outline-none min-w-[60px] sm:min-w-[40px]",
-    deleteButton: "flex items-center justify-center mt-6 h-8 min-w-[24px] bg-red-700",
+    deleteButton: "flex items-center justify-center h-8 min-w-[24px] bg-red-700",
 
     dropdownUL: "absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded bg-white py-1 text-base shadow-lg focus:outline-none",
     dropdownLI: "relative cursor-pointer select-none py-2 pl-3 pr-9 text-gray-900 hover:bg-gray-100",

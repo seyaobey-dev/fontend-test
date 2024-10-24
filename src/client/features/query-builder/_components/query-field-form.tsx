@@ -9,6 +9,18 @@ import { ChangeEvent } from "react";
 export const QueryFieldForm: React.FC<{ groupId: string; field: FieldCondition; }> = ({ groupId, field }) => {
     const { fieldsMapping, handleFieldValueChange, handleDeleteField } = useQueryBuilderData();
 
+    if (typeof fieldsMapping !== "object") {
+        console.log("fieldsMapping is not an object", typeof fieldsMapping);
+    }
+
+    if (!fieldsMapping) {
+        console.log("fieldsMapping is not defined", {
+            fieldsMapping,
+        })
+
+        // throw new Error("fieldsMapping is not defined");
+    }
+    
     const fieldMapping = fieldsMapping[field.fieldName];
 
     const handleFieldNameChange = (fieldId: string) => (value: string) => {
@@ -45,6 +57,7 @@ export const QueryFieldForm: React.FC<{ groupId: string; field: FieldCondition; 
 
             case "enum":
                 return <CustomSelect 
+                        id={field.id!}
                         label={fieldMapping.label}
                         value={field.value as TransactionState}
                         onChange={handleValueChange(field.id!)}
@@ -53,15 +66,17 @@ export const QueryFieldForm: React.FC<{ groupId: string; field: FieldCondition; 
 
             case "currency":
                 return <CurrencyInput 
+                        id={field.id!}
                         value={field.value as CurrencyValue} 
                         onChange={handleValueChange(field.id!)} 
                      />
 
             default:
                 return <CustomInput 
+                        id={field.id!}
                         label="Value" 
                         value={field.value as string} 
-                    onChange={handleValueChange(field.id!)} 
+                        onChange={handleValueChange(field.id!)} 
                     />
 
         }
@@ -69,6 +84,7 @@ export const QueryFieldForm: React.FC<{ groupId: string; field: FieldCondition; 
 
     return <div className="px-1 flex flex-row items-center gap-4 mb-4">
         <CustomSelect 
+            id={`field-name-${field.id}`}
             label="Field name" 
             value={field.fieldName}  
             onChange={handleFieldNameChange(field.id!)} 
@@ -81,13 +97,14 @@ export const QueryFieldForm: React.FC<{ groupId: string; field: FieldCondition; 
         <CustomSelect 
             label="Operator" 
             value={field.operator}  
+            id={`field-operator-${field.id}`}
             onChange={handleOperatorChange(field.id!)} 
             options={mapOperation(fieldMapping.type).map(operator => ({ value: operator, label: operator }))}
         />
 
         {renderValueInput()}
 
-        <DeleteButton onClick={() => handleDeleteField({ groupId, fieldId: field.id! })} />
+        <DeleteButton className="mt-6" onClick={() => handleDeleteField({ groupId, fieldId: field.id! })} />
     </div>
 }
 
