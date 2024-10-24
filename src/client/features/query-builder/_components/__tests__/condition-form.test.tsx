@@ -1,11 +1,11 @@
 import { describe, it } from "node:test";
 import { render } from "@testing-library/react";
-import { ConditionForm } from "../condition-form";
+import { QueryFieldForm } from "../query-field-form";
 
 describe("ConditionForm", () => {
     it("renders", () => {
         // @ts-expect-error expected
-        render(<ConditionForm field={{ fieldName: "amount", operator: "EQUAL", value: "Value 1" }} />);
+        render(<QueryFieldForm field={{ fieldName: "amount", operator: "EQUAL", value: "Value 1" }} />);
     });
 
     /**

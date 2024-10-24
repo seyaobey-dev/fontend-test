@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { Combinator, FieldCondition, GroupItem, SubCondition } from "../../../../types";
-import { HandleAppendFieldFunction, HandleAppendGroupFunction, HandleChangeCombinatorFunction, HandleDeleteFieldFunction, HandleDeleteGroupFunction, HandleFieldValueChangeFunction, InsertUpdateContext } from "./insert-update-context";
+import { Combinator, FieldCondition, FieldTypeMapping, GroupQuery, SubCondition } from "../../../../types";
+import { HandleAppendFieldFunction, HandleAppendGroupFunction, HandleChangeCombinatorFunction, HandleDeleteFieldFunction, HandleDeleteGroupFunction, HandleFieldValueChangeFunction, QueryBuilderDataContext } from "./query-builder-data-context";
 
 /**
  * This component uses the context api to transform the initial data into an array of groups for better edit.
  * Then it exposes the data and the functions to update the data to the children.
  */
 
-export const InsertUpdateProvider = ({ children, root }: React.PropsWithChildren<{ root: Combinator }>) => {
-    const [data, setData] = useState<GroupItem[]>(convertToArray(root));
+export const QueryBuilderDataProvider = ({ children, root, fieldsMapping }: React.PropsWithChildren<{ root: Combinator; fieldsMapping: FieldTypeMapping }>) => {
+
+    // Convert the initial data into an array of groups
+    const [data, setData] = useState<GroupQuery[]>(convertToArray(root));
 
     const handleChangeCombinator: HandleChangeCombinatorFunction = (props) => {
         setData((prev) => prev.map((group) => {
@@ -28,10 +30,20 @@ export const InsertUpdateProvider = ({ children, root }: React.PropsWithChildren
                     ...group,
                     fields:  group.fields.map((field) => {
                         if (field.id === fieldId) {
-                            return {
+                            let _field = {
                                 ...field,
                                 [key]: value,
+                            };
+
+                            if (key === "fieldName") {
+                                const mapping = fieldsMapping[_field.fieldName];
+                                _field = {
+                                    ..._field,
+                                    value: mapping.initialValue,
+                                }
                             }
+
+                            return _field;
                         }
 
                         return field;
@@ -49,11 +61,12 @@ export const InsertUpdateProvider = ({ children, root }: React.PropsWithChildren
                     ...group,
                     fields: [
                         ...group.fields, 
+                        // initially renders a name field
                         {
                             id: randomId(),
                             fieldName: "name",
                             operator: "EQUAL",
-                            value: "",
+                            value: fieldsMapping.name.initialValue,
                         }
                     ]
                 }
@@ -73,17 +86,33 @@ export const InsertUpdateProvider = ({ children, root }: React.PropsWithChildren
     }
 
     const handleAppendGroup: HandleAppendGroupFunction = (props) => {
-        setData((prev) => [...prev, { id: randomId(), parentId: props.groupId, combinator: "AND", fields: [] }]);
+        setData((prev) => [...prev, { 
+                id: randomId(), 
+                parentId: props.groupId, 
+                combinator: "AND", 
+                fields: [
+                    {
+                        id: randomId(),
+                        fieldName: "name",
+                        operator: "EQUAL",
+                        value: fieldsMapping.name.initialValue, // initially renders a name field
+                    }
+                ] 
+            }
+        ]);
     }
 
     const handleDeleteGroup: HandleDeleteGroupFunction = (props) => {
         setData((prev) => prev.filter((group) => group.id !== props.groupId));
     }
 
+    console.log("data", data);
+
     return (    
-        <InsertUpdateContext.Provider 
+        <QueryBuilderDataContext.Provider 
             value={{ 
                 data, 
+                fieldsMapping,
                 handleFieldValueChange, 
                 handleChangeCombinator,
                 handleAppendField,
@@ -92,13 +121,13 @@ export const InsertUpdateProvider = ({ children, root }: React.PropsWithChildren
                 handleDeleteGroup,
             }}>
                 {children}
-        </InsertUpdateContext.Provider>
+        </QueryBuilderDataContext.Provider>
     )
 }
 
 const convertToArray = (root: Combinator) => {
     // add root group
-    let groups: GroupItem[] = [
+    let groups: GroupQuery[] = [
         {
             id: "root",
             parentId: null,

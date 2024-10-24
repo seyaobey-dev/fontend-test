@@ -1,11 +1,15 @@
 import { createContext } from "react";
-import { CombinatorOperation, GroupItem } from "../../../../types";
+import { CombinatorOperation, CurrencyValue, FieldTypeMapping, GroupQuery } from "../../../../types";
+
+/**
+ * context for the query builder data, exposed to the whole app
+ */
 
 export type HandleFieldValueChangeFunction = (props: { 
     groupId: string, 
     fieldId: string, 
     key: "fieldName" | "operator" | "value"; 
-    value: string 
+    value: CurrencyValue | string | number
 }) => void;
 
 export type HandleChangeCombinatorFunction = (props: {
@@ -30,8 +34,9 @@ export type HandleDeleteGroupFunction = (props: {
     groupId: string;
 }) => void;
 
-export const InsertUpdateContext = createContext<{ 
-    data: GroupItem[]; 
+export const QueryBuilderDataContext = createContext<{ 
+    data: GroupQuery[]; 
+    fieldsMapping: FieldTypeMapping;
     handleFieldValueChange: HandleFieldValueChangeFunction;
     handleChangeCombinator: HandleChangeCombinatorFunction;
     handleAppendField: HandleAppendFieldFunction;

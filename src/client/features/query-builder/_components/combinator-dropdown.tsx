@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { HiChevronUpDown } from "react-icons/hi2";
 import { CombinatorOperation } from "../../../../types";
-import { CustomButton } from "./form-controls";
+import { CustomButton } from "./query-form-controls";
 import { useCloseOnClickOutside } from "./use-close-on-click-outside";
-import { useInsertUpdate } from "../_providers/use-insert-update";
-// import { useInsertUpdate } from "../_providers/use-insert-update";
+import { useQueryBuilderData } from "../_providers/use-query-builder-data";
 
-export const SelectCombinator: React.FC<{ id: string; value: CombinatorOperation; }> = ({ value, id }) => {
+/**
+ * This component renders the combinator dropdown
+ */
+export const CombinatorDropDown: React.FC<{ id: string; value: CombinatorOperation; }> = ({ value, id }) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const { handleChangeCombinator } = useInsertUpdate();
+    const { handleChangeCombinator } = useQueryBuilderData();
 
     const ref = useCloseOnClickOutside({ onClose: () => setIsOpen(false) });
 
