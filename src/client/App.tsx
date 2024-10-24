@@ -1,4 +1,4 @@
-// import axios from "axios";
+import axios from "axios";
 import { fieldsMapping, mockData } from "./constants";
 
 import { QueryBuilderDataProvider } from "./features/query-builder/_providers/query-builder-data-provider";
@@ -12,15 +12,14 @@ function App() {
 
   const handleSubmit = async (data: GroupQuery[]) => {
     const combinator: Combinator = rebuildJson(data);
-    setResult(combinator);
-    
-    // setResult(rebuildJson([]));
-    // try {
-    //   await axios.post("/api/save-rules", {});
-    //   alert("Submitted");
-    // } catch {
-    //   alert("Error");
-    // }
+
+    try {
+      await axios.post("/api/save-rules", combinator);
+      setResult(combinator);
+      alert("Submitted");
+    } catch {
+      alert("Error");
+    }
   };
 
   return (
