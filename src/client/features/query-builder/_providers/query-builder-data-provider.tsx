@@ -106,8 +106,6 @@ export const QueryBuilderDataProvider = ({ children, root, fieldsMapping }: Reac
         setData((prev) => prev.filter((group) => group.id !== props.groupId));
     }
 
-    console.log("data", data);
-
     return (    
         <QueryBuilderDataContext.Provider 
             value={{ 

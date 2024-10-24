@@ -8,18 +8,6 @@ import { ChangeEvent } from "react";
  */
 export const QueryFieldForm: React.FC<{ groupId: string; field: FieldCondition; }> = ({ groupId, field }) => {
     const { fieldsMapping, handleFieldValueChange, handleDeleteField } = useQueryBuilderData();
-
-    if (typeof fieldsMapping !== "object") {
-        console.log("fieldsMapping is not an object", typeof fieldsMapping);
-    }
-
-    if (!fieldsMapping) {
-        console.log("fieldsMapping is not defined", {
-            fieldsMapping,
-        })
-
-        // throw new Error("fieldsMapping is not defined");
-    }
     
     const fieldMapping = fieldsMapping[field.fieldName];
 

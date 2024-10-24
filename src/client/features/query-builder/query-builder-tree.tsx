@@ -1,9 +1,10 @@
+import { GroupQuery } from "../../../types";
 import { QueryGroup } from "./_components/query-group";
 import { useQueryBuilderData } from "./_providers/use-query-builder-data";
 
 // This component renders the root group and all its children recursively
 
-export const QueryBuilderTree: React.FC<{ handleClick: () => void }> = ({ handleClick }) => {
+export const QueryBuilderTree: React.FC<{ onSubmit: (data: GroupQuery[]) => void; onCancel: () => void }> = ({ onSubmit, onCancel }) => {
   const { data } = useQueryBuilderData();
   
   // Find the root group
@@ -11,7 +12,7 @@ export const QueryBuilderTree: React.FC<{ handleClick: () => void }> = ({ handle
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("submitted", data);
+    onSubmit(data);
   }
 
   return (
@@ -25,11 +26,11 @@ export const QueryBuilderTree: React.FC<{ handleClick: () => void }> = ({ handle
           <QueryGroup group={root} data={data} />
         </div>
 
-        <button type="submit">
+        <button type="submit" role="submit">
           Submit
         </button>
 
-        <button type="button" onClick={handleClick}>
+        <button type="button" role="cancel" onClick={onCancel}>
           Cancel
         </button>
       </form>
