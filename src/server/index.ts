@@ -10,6 +10,7 @@ app.use(bodyParser.json());
 
 app.post("/api/save-rules", (req, res) => {
   const rules = req.body;
+
   const filePath = path.join(process.cwd(), "rules.json");
 
   fs.writeFile(filePath, JSON.stringify(rules, null, 2), (err) => {

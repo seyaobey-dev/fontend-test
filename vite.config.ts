@@ -18,9 +18,4 @@ export default defineConfig({
       "~": path.resolve(__dirname, "src/client"),
     },
   },
-  test: {
-    environment: "jsdom",
-    globals: true,
-    setupFiles: "./vite.setup.ts",
-  },
 });

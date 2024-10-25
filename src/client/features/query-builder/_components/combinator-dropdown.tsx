@@ -1,46 +1,52 @@
 import { useState } from "react";
 import { HiChevronUpDown } from "react-icons/hi2";
 import { CombinatorOperation } from "../../../../types";
-import { SelectOperatorButton } from "./form-controls";
+import { CustomButton } from "./query-form-controls";
 import { useCloseOnClickOutside } from "./use-close-on-click-outside";
+import { useQueryBuilderData } from "../_providers/use-query-builder-data";
 
-export const SelectCombinator: React.FC<{ combinator: CombinatorOperation; }> = ({ combinator }) => {
+/**
+ * This component renders the combinator dropdown
+ */
+export const CombinatorDropDown: React.FC<{ id: string; value: CombinatorOperation; }> = ({ value, id }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedOption, setSelectedOption] = useState<CombinatorOperation>(combinator);
+
+    const { handleChangeCombinator } = useQueryBuilderData();
 
     const ref = useCloseOnClickOutside({ onClose: () => setIsOpen(false) });
-  
+
     const toggleDropdown = () => setIsOpen(!isOpen);
-  
-    const selectOption = (option: CombinatorOperation) => {
-      setSelectedOption(option);
+
+    const selectOption = (value: CombinatorOperation) => () => {
+      handleChangeCombinator({ groupId: id, value });
       setIsOpen(false);
     };
+
   
     return (
       <div className="relative" ref={ref}>
-        <SelectOperatorButton
+        <CustomButton
           type="button"
           onClick={toggleDropdown}
           className="border-[#fefefe] hover:border-[#fefefe] border border-solid"
         >
-          <p>{selectedOption}</p>
+          <p>{value}</p>
           <HiChevronUpDown />
-        </SelectOperatorButton>
+        </CustomButton>
 
         {isOpen && (
           <div className={classNames.dropdown}>
             <button
               className={classNames.option}
-              onClick={() => selectOption("AND")}
+              onClick={selectOption("AND")}
             >
-              And
+              AND
             </button>
             <button
               className={classNames.option}
-              onClick={() => selectOption("OR")}
+              onClick={selectOption("OR")}
             >
-              Or
+              OR
             </button>
           </div>
         )}
