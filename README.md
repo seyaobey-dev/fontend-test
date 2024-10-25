@@ -20,5 +20,3 @@ Follow these steps to set up and run the project locally.
 
 - Download Chromium binary: `npx playwright install chromium`
 - Run E2E testing: `npm run test:e2e`
-
-
