@@ -6,7 +6,6 @@ import path from "path";
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 3001,
     proxy: {
       "/api": {
         target: "http://localhost:3000",
@@ -18,10 +17,5 @@ export default defineConfig({
     alias: {
       "~": path.resolve(__dirname, "src/client"),
     },
-  },
-  test: {
-    environment: "jsdom",
-    globals: true,
-    setupFiles: "./vite.setup.ts",
   },
 });

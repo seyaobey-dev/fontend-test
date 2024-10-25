@@ -1,6 +1,6 @@
 import { Combinator, GroupQuery, SubCondition } from "../../../types";
 
-export const rebuildJson = (groups: GroupQuery[]): Combinator => {
+export const transformArrayOfGroupsToJSON = (groups: GroupQuery[]): Combinator => {
     
     const root = groups.find((g) => !g.parentId)!;
 

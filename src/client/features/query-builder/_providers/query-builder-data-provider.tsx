@@ -1,16 +1,29 @@
 import { useState } from "react";
-import { Combinator, FieldCondition, FieldTypeMapping, GroupQuery, SubCondition } from "../../../../types";
+import { FieldTypeMapping, GroupQuery } from "../../../../types";
 import { HandleAppendFieldFunction, HandleAppendGroupFunction, HandleChangeCombinatorFunction, HandleDeleteFieldFunction, HandleDeleteGroupFunction, HandleFieldValueChangeFunction, QueryBuilderDataContext } from "./query-builder-data-context";
 
 /**
- * This component uses the context api to transform the initial data into an array of groups for better edit.
- * Then it exposes the data and the functions to update the data to the children.
+ * This component uses the context api to the whole application:
+ * the array of parent-child groups of query fiels
+ * methods to append/delete fields and groups
  */
 
-export const QueryBuilderDataProvider = ({ children, root, fieldsMapping }: React.PropsWithChildren<{ root: Combinator; fieldsMapping: FieldTypeMapping }>) => {
+export const QueryBuilderDataProvider = ({ children, fieldsMapping }: React.PropsWithChildren<{ fieldsMapping: FieldTypeMapping }>) => {
 
-    // Convert the initial data into an array of groups
-    const [data, setData] = useState<GroupQuery[]>(convertToArray(root));
+    // Initialize the data with a root group and a name field
+    const [data, setData] = useState<GroupQuery[]>([{
+        id: "root",
+        parentId: null,
+        combinator: "AND",
+        fields: [
+            {
+                id: randomId(),
+                fieldName: "name",
+                operator: "EQUAL",
+                value: fieldsMapping.name.initialValue,
+            }
+        ],
+    }]);
 
     const handleChangeCombinator: HandleChangeCombinatorFunction = (props) => {
         setData((prev) => prev.map((group) => {
@@ -122,48 +135,6 @@ export const QueryBuilderDataProvider = ({ children, root, fieldsMapping }: Reac
         </QueryBuilderDataContext.Provider>
     )
 }
-
-const convertToArray = (root: Combinator) => {
-    // add root group
-    let groups: GroupQuery[] = [
-        {
-            id: "root",
-            parentId: null,
-            combinator: root.combinator ?? "AND",
-            fields: ((root.conditions ?? []) as FieldCondition[])
-                        .map((f) => ({...f, id: randomId()})),
-        }
-    ];
-
-    let parentId = "root";
-    let stack = (root.conditions ?? []).filter((cond) => (cond as SubCondition).combinator) as SubCondition[];
-
-    while (stack.length > 0) {
-        const id = randomId();
-        const sub = stack.shift()!;
-        const fields = (sub.subConditions.filter((cond) => !(cond as SubCondition).combinator) as FieldCondition[])
-                         .map((f) => ({...f, id: randomId()}));
-        
-        groups = [
-            ...groups,
-            {
-                id,
-                parentId,
-                combinator: sub.combinator,
-                fields,
-            }
-        ];
-
-        parentId = id;
-        
-        const nextStack = sub.subConditions.filter((cond) => (cond as SubCondition).combinator) as SubCondition[];
-        
-        stack = [...stack, ...nextStack];
-    }
-
-    return groups;
-};
-
 
 const randomId = () => {
     const timestamp = Date.now();

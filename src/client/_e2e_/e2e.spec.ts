@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe("App End-To-End Tests", () => {
     test.beforeEach(async ({ page }) => {
     // Navigate to the app's URL
-    await page.goto("http://localhost:3001");
+    await page.goto("http://localhost:5173");
   });
 
   test('should render the app and display the main components', async ({ page }) => {
